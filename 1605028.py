@@ -8,6 +8,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
+from sklearn.feature_selection import mutual_info_classif
+
 np.random.seed(9999)
 
 
@@ -136,7 +138,7 @@ def adaboost(df, iteration, Y_out):
 
 
 def dataPreprocessing(df):
-    # filling nan values-  --stackoverflow
+    # filling nan values-           --stackoverflow
     catCols = df.select_dtypes(include=['object']).columns.tolist()
     for column in df:
         if df[column].isnull().any():
@@ -173,6 +175,17 @@ def runDataset1():
     Y_out = np.sign(Y_out)  # convert to -1 and +1
     df.drop(df.columns[-1], axis=1, inplace=True)  # drop the last column
 
+    ###### Sort features via information gain #####
+    # allCols = df.columns.tolist()
+    # coefficient = pd.DataFrame(mutual_info_classif(df, Y_out).reshape(-1, 1),
+    #                            columns=['Coefficient'], index=allCols)  # stackverflow
+    # sortedColNnames = coefficient.sort_values(
+    #     by='Coefficient', ascending=False)[:].index
+    # df = df[sortedColNnames]
+
+    ###################################
+
+    #### output###
     print('________ Logistic Regression Outuput __________')
     logisticOutput = logisticRegression(df, Y_out, 1)
     # print('logistic output ', logisticOutput)
